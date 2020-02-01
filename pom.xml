@@ -21,16 +21,10 @@
 			<artifactId>google-maps-services</artifactId>
 			<version>0.9.4</version>
 		</dependency>
-		<dependency>
-			<groupId>org.slf4j</groupId>
-			<artifactId>slf4j-simple</artifactId>
-			<version>1.7.25</version>
-		</dependency>
 	</dependencies>
 	
 	<build>
 		<plugins>
-			<!-- 実行可能jarファイル用のプラグイン -->
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-assembly-plugin</artifactId>
@@ -38,19 +32,16 @@
 				<configuration>
 					<appendAssemblyId>false</appendAssemblyId>
 					<descriptorRefs>
-						<!-- 依存するリソースをすべてjarに同梱する -->
 						<descriptorRef>jar-with-dependencies</descriptorRef>
 					</descriptorRefs>
 					<archive>
 						<manifest>
-							<!--mainClassタグ: パッケージ名.メインクラス名 -->
 							<mainClass>googleMapSearchCoordinates.Geocoder</mainClass>
 						</manifest>
 					</archive>
 				</configuration>
 				<executions>
 					<execution>
-						<!-- idタグは任意の文字列であれば何でもよい -->
 						<id>make-assembly</id>
 						<phase>package</phase>
 						<goals>

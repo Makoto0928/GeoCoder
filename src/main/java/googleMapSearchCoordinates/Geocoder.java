@@ -24,11 +24,9 @@ public class Geocoder {
 	
 	public static void main(String[] args) throws ApiException, InterruptedException, IOException{
 		
-		//ファイル読み込みで使用する３つのクラス
 		FileInputStream fi = null;
 		InputStreamReader is = null;
 		BufferedReader br = null;
-		// ファイル書き込みクラス
 		PrintWriter pw = null;
 		
 		Scanner scanner = new Scanner(System.in);
@@ -49,19 +47,13 @@ public class Geocoder {
 			System.out.print("> ");
 			String targetFile = scanner.nextLine();
 			
-			// Fileクラスのオブジェクトを生成する
 			File file = new File(targetFile);
-			// PrintWriterクラスのオブジェクトを生成する
 			pw = new PrintWriter(new BufferedWriter(new OutputStreamWriter(new FileOutputStream(file), characterCode)));	// Shift-JIS, UTF-8
-			
-			//読み込みファイルのインスタンス生成, ファイル名と文字コードを指定する
 			fi = new FileInputStream(readFile);
 			is = new InputStreamReader(fi, characterCode);	// Shift-JIS, UTF-8
 			br = new BufferedReader(is);
-			//読み込み行
 			String line;
 			pw.println("BuildingName,Address,Latitude,Longitude");
-			//1行ずつ読み込みを行う
 			while ((line = br.readLine()) != null) {
 				String[] dataAddress = line.split(",");
 				/** Google Map GeoCoding */
@@ -71,12 +63,11 @@ public class Geocoder {
 				if (results != null && results.length > 0) {
 					// Use First Data (address data)
 					LatLng latLng = results[0].geometry.location;
-					// 緯度: latLng.lat, 経度: latLng.lng
+					// Latitude: latLng.lat, Longitude: latLng.lng
 					System.out.println("BuildingName: " + dataAddress[0] + ", Address: " + dataAddress[1] + ", Latitude: " + latLng.lat + ", Longitude: " + latLng.lng);
 					pw.println(dataAddress[0] + "," + dataAddress[1] + "," + latLng.lat + "," + latLng.lng);
 				}
 			}
-//			Thread.sleep(5);
 			br.close();
 			pw.close();
 		}	else if (searchMethod.equals("2")) {
@@ -89,7 +80,6 @@ public class Geocoder {
 			
 			File file = new File(targetFile);
 			pw = new PrintWriter(new BufferedWriter(new OutputStreamWriter(new FileOutputStream(file), characterCode)));
-			
 			fi = new FileInputStream(readFile);
 			is = new InputStreamReader(fi, characterCode);
 			br = new BufferedReader(is);
@@ -105,7 +95,6 @@ public class Geocoder {
 					pw.println(dataAddress[0] + "," + latLng.lat + "," + latLng.lng);
 				}
 			}
-//			Thread.sleep(5);
 			br.close();
 			pw.close();
 		}	else if (searchMethod.equals("3")) {
@@ -123,6 +112,7 @@ public class Geocoder {
 			Thread.sleep(60000);
 		}	else {
 			System.out.println("Get out here!");
+			Thread.sleep(5000);
 		}
 	}
 	
@@ -136,12 +126,10 @@ public class Geocoder {
 		try {
 			GeocodingResult[] results = req.await();
 			if (results == null || results.length == 0) {
-				// ZERO_RESULTSはresults.length==0の空配列がsuccessful扱いで返ってくるっぽい
 				System.out.println("========== Zero results. ==========");
 			}
 			return results;
 		}	catch (ApiException e) {
-			// ZERO_RESULTS以外のApiExceptionはこっちで
 			System.out.println("========== Geocode failed. ==========");
 			e.printStackTrace();
 			throw e;
